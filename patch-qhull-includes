@@ -1,0 +1,17 @@
+diff --git a/src/libslic3r/TriangleMesh.cpp b/src/libslic3r/TriangleMesh.cpp
+index 20c9a9c..4d35cab 100644
+--- a/src/libslic3r/TriangleMesh.cpp
++++ b/src/libslic3r/TriangleMesh.cpp
+@@ -2,9 +2,9 @@
+ #include "ClipperUtils.hpp"
+ #include "Geometry.hpp"
+ #include "Tesselate.hpp"
+-#include "qhull/src/libqhullcpp/Qhull.h"
+-#include "qhull/src/libqhullcpp/QhullFacetList.h"
+-#include "qhull/src/libqhullcpp/QhullVertexSet.h"
++#include <libqhullcpp/Qhull.h>
++#include <libqhullcpp/QhullFacetList.h>
++#include <libqhullcpp/QhullVertexSet.h>
+ #include <cmath>
+ #include <deque>
+ #include <queue>

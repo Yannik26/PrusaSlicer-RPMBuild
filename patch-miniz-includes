@@ -1,0 +1,65 @@
+diff --git a/src/libslic3r/Format/3mf.cpp b/src/libslic3r/Format/3mf.cpp
+index 5a16a6e..2023259 100644
+--- a/src/libslic3r/Format/3mf.cpp
++++ b/src/libslic3r/Format/3mf.cpp
+@@ -16,7 +16,7 @@
+ 
+ #include <expat.h>
+ #include <Eigen/Dense>
+-#include <miniz/miniz_zip.h>
++#include <miniz.h>
+ 
+ // VERSION NUMBERS
+ // 0 : .3mf, files saved by older slic3r or other applications. No version definition in them.
+diff --git a/src/libslic3r/Format/AMF.cpp b/src/libslic3r/Format/AMF.cpp
+index a3f92e4..f85c6d6 100644
+--- a/src/libslic3r/Format/AMF.cpp
++++ b/src/libslic3r/Format/AMF.cpp
+@@ -16,7 +16,7 @@
+ #include <boost/filesystem/operations.hpp>
+ #include <boost/algorithm/string.hpp>
+ #include <boost/nowide/fstream.hpp>
+-#include <miniz/miniz_zip.h>
++#include <miniz.h>
+ 
+ #if 0
+ // Enable debugging and assert in this file.
+diff --git a/src/libslic3r/Format/PRUS.cpp b/src/libslic3r/Format/PRUS.cpp
+index 80aae75..04cedc0 100644
+--- a/src/libslic3r/Format/PRUS.cpp
++++ b/src/libslic3r/Format/PRUS.cpp
+@@ -4,7 +4,7 @@
+ #include <boost/algorithm/string.hpp>
+ #include <boost/nowide/convert.hpp>
+ 
+-#include <miniz/miniz_zip.h>
++#include <miniz.h>
+ 
+ #include <Eigen/Geometry>
+ 
+diff --git a/src/libslic3r/Rasterizer/Rasterizer.cpp b/src/libslic3r/Rasterizer/Rasterizer.cpp
+index 6384a24..e121355 100644
+--- a/src/libslic3r/Rasterizer/Rasterizer.cpp
++++ b/src/libslic3r/Rasterizer/Rasterizer.cpp
+@@ -15,7 +15,7 @@
+ #include <agg/agg_path_storage.h>
+ 
+ // Experimental minz image write:
+-#include <miniz/miniz_tdef.h>
++#include <miniz.h>
+ 
+ namespace Slic3r {
+ 
+diff --git a/src/libslic3r/Zipper.cpp b/src/libslic3r/Zipper.cpp
+index 4466f1b..16f4f5b 100644
+--- a/src/libslic3r/Zipper.cpp
++++ b/src/libslic3r/Zipper.cpp
+@@ -3,7 +3,7 @@
+ #include <iostream>
+ 
+ #include "Zipper.hpp"
+-#include "miniz/miniz_zip.h"
++#include <miniz.h>
+ #include <boost/log/trivial.hpp>
+ 
+ #include "I18N.hpp"

@@ -1,0 +1,13 @@
+diff --git a/src/libslic3r/Format/AMF.cpp b/src/libslic3r/Format/AMF.cpp
+index ff1da37..a3f92e4 100644
+--- a/src/libslic3r/Format/AMF.cpp
++++ b/src/libslic3r/Format/AMF.cpp
+@@ -2,7 +2,7 @@
+ #include <string.h>
+ #include <map>
+ #include <string>
+-#include <expat/expat.h>
++#include <expat.h>
+ 
+ #include <boost/nowide/cstdio.hpp>
+ 
