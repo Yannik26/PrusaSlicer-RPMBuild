@@ -21,6 +21,13 @@ Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_2.0.0.tar
 Source1:        %name.desktop
 Source2:        %name.appdata.xml
 
+# A single test suite fails, but only on aarch64 and s390x, due to floating
+# point rouding issues.   This patch adds small epsilon (4e-15) to one
+# comparison to work around this.
+# We will conditionally apply this so it's a source file, not a patch.
+# https://github.com/prusa3d/PrusaSlicer/issues/2461
+Source10:       patch-testsuite-epsilon
+
 # Fix an improper include of expat.h
 # https://github.com/prusa3d/PrusaSlicer/pull/2315
 Patch0:         patch-expat-includes
@@ -38,12 +45,6 @@ Patch10:        https://github.com/prusa3d/PrusaSlicer/commit/07282eb24d027817b4
 Patch20:        https://raw.githubusercontent.com/prusa3d/PrusaSlicer/debian/debian/patches/fix-gizmo-icon-size.patch
 Patch21:        https://raw.githubusercontent.com/prusa3d/PrusaSlicer/debian/debian/patches/handle-wx-assert-with-boost.patch
 Patch22:        https://raw.githubusercontent.com/prusa3d/PrusaSlicer/debian/debian/patches/mode-switching-fix.patch
-
-# Currently a single test fails on these two architctures.  See
-# https://github.com/prusa3d/PrusaSlicer/issues/2461
-# The test could be disabled but without a way to know if it will break
-# something, it's safer to see what upstream has to say about it first.
-ExcludeArch:    s390x aarch64
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
@@ -297,6 +298,13 @@ sed -i 's/^#include.*miniz.*/#include <miniz.h>/' \
 commit "Fix miniz includes"
 %endif
 
+# A single test fails on these architectures due to a difference in floating
+# point rounding causing a tiny value instead of an expected zero.
+%ifarch  s390x aarch64
+git apply %SOURCE10
+commit "Testsuite fix"
+%endif
+
 
 %build
 mkdir Build
@@ -403,7 +411,9 @@ make test ARGS=-V
 
 %changelog
 * Wed Jun 05 2019 Jason L Tibbitts III <tibbs@math.uh.edu> - 2.0.0-2
-- Update with review feedback.
+- Update with review feedback
+- Add in three patches suggested by upstream
+- Try to enable building on aarch64 and s390x
 
 * Mon May 20 2019 Jason L Tibbitts III <tibbs@math.uh.edu> - 2.0.0-1
 - Update to 2.0.0 final release.

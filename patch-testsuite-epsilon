@@ -1,0 +1,13 @@
+diff --git a/xs/t/03_point.t b/xs/t/03_point.t
+index cb71f68..0cc58e1 100644
+--- a/xs/t/03_point.t
++++ b/xs/t/03_point.t
+@@ -44,7 +44,7 @@ ok !$point->coincides_with($point2), 'coincides_with';
+ 
+ {
+     my $line = Slic3r::Line->new([50,50], [125,-25]);
+-    is +Slic3r::Point->new(100,0)->distance_to_line($line),  0, 'distance_to_line()';
++    cmp_ok(abs(Slic3r::Point->new(100,0)->distance_to_line($line)), '<=',  4e-15, 'distance_to_line()');
+ }
+ 
+ {
