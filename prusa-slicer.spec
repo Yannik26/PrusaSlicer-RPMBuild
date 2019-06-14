@@ -3,7 +3,7 @@
 
 Name:           prusa-slicer
 Version:        2.0.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -346,6 +346,15 @@ pushd Build
 %make_install
 popd
 
+# Since the binary segfaults under Wayland, we have to wrap it.
+mv %buildroot%_bindir/prusa-slicer %buildroot%_bindir/prusa-slicer.wrapped
+cat >> %buildroot%_bindir/prusa-slicer <<'END'
+#!/bin/bash
+export GDK_BACKEND=x11
+exec %_bindir/prusa-slicer.wrapped "$@"
+END
+chmod 755 %buildroot%_bindir/prusa-slicer
+
 mkdir -p %buildroot%_datadir/icons/hicolor/
 cp -r hicolor/* %buildroot%_datadir/icons/hicolor/
 
@@ -402,6 +411,7 @@ make test ARGS=-V
 %license LICENSE
 %doc README.md
 %_bindir/%name
+%_bindir/%name.wrapped
 %_datadir/icons/hicolor/*/apps/%name.png
 %_datadir/applications/%name.desktop
 %_datadir/appdata/%name.appdata.xml
@@ -410,6 +420,9 @@ make test ARGS=-V
 
 
 %changelog
+* Fri Jun 14 2019 Jason L Tibbitts III <tibbs@math.uh.edu> - 2.0.0-3
+- Wrap the executable to set GDK_BACKEND=x11 to avoid segfault on Wayland.
+
 * Wed Jun 05 2019 Jason L Tibbitts III <tibbs@math.uh.edu> - 2.0.0-2
 - Update with review feedback
 - Add in three patches suggested by upstream
