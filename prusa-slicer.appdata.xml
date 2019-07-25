@@ -9,7 +9,7 @@
         <p>PrusaSlicer is based on Slic3r by Alessandro Ranelucci and the RepRap community.</p>
     </description>
     <screenshots>
-        <screenshot type="default" width="1152" height="940">https://www.prusa3d.com/wp-content/uploads/2018/07/image.jpg</screenshot>
+        <screenshot type="default" width="2253" height="1432">https://user-images.githubusercontent.com/10857207/61836791-71ffa080-ae47-11e9-9011-2e6500956e26.png</screenshot>
     </screenshots>
     <url type="homepage">https://github.com/prusa3d/PrusaSlicer/</url>
     <updatecontact>bubnikv@gmail.com</updatecontact>
