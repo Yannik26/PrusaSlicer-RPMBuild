@@ -3,7 +3,7 @@
 
 Name:           prusa-slicer
 Version:        2.0.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -420,6 +420,9 @@ make test ARGS=-V
 
 
 %changelog
+* Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 2.0.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Fri Jun 14 2019 Jason L Tibbitts III <tibbs@math.uh.edu> - 2.0.0-3
 - Wrap the executable to set GDK_BACKEND=x11 to avoid segfault on Wayland.
 
