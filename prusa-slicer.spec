@@ -272,14 +272,6 @@ unbundle miniz
 #commit "Fix miniz includes"
 %endif
 
-# A single test fails on these architectures due to a difference in floating
-# point rounding causing a tiny value instead of an expected zero.
-# XXX probably not needed now
-%ifarch  s390x aarch64
-git apply %SOURCE10
-commit "Testsuite fix"
-%endif
-
 # These tests were fixed but the fixes were undone upsteam with commit ac6969c
 # https://github.com/prusa3d/PrusaSlicer/issues/2288
 # Just remove them for now
