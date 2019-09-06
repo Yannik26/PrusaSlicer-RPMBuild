@@ -20,13 +20,6 @@ Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_2.1.0-rc.
 Source1:        %name.desktop
 Source2:        %name.appdata.xml
 
-# A single test suite fails, but only on aarch64 and s390x, due to floating
-# point rouding issues.   This patch adds small epsilon (4e-15) to one
-# comparison to work around this.
-# We will conditionally apply this so it's a source file, not a patch.
-# https://github.com/prusa3d/PrusaSlicer/issues/2461
-Source10:       patch-testsuite-epsilon
-
 BuildRequires:  boost-devel
 BuildRequires:  cmake
 BuildRequires:  cereal-devel
