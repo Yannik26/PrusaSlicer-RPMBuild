@@ -20,6 +20,10 @@ Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_%version.
 Source1:        %name.desktop
 Source2:        %name.appdata.xml
 
+# The source fails to build on s390x, so disable it temporarily; see
+# https://github.com/prusa3d/PrusaSlicer/issues/2879
+ExcludeArch: s390x
+
 BuildRequires:  boost-devel
 BuildRequires:  cmake
 BuildRequires:  cereal-devel
