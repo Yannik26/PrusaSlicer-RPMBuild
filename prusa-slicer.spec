@@ -2,8 +2,8 @@
 %bcond_without perltests
 
 Name:           prusa-slicer
-Version:        2.1.0~rc0
-Release:        2%{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -16,13 +16,9 @@ Summary:        3D printing slicer optimized for Prusa printers
 # that here.
 License:        AGPLv3
 URL:            https://github.com/prusa3d/PrusaSlicer/
-Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_2.1.0-rc.tar.gz
+Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_%version.tar.gz
 Source1:        %name.desktop
 Source2:        %name.appdata.xml
-
-# The source fails to build on s390x, so disable it temporarily; see
-# https://github.com/prusa3d/PrusaSlicer/issues/2879
-ExcludeArch: s390x
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
@@ -216,7 +212,7 @@ community.
 
 
 %prep
-%autosetup -S git -n PrusaSlicer-version_2.1.0-rc
+%autosetup -S git -n PrusaSlicer-version_%version
 
 commit () { git commit -q -a -m "$1" --author "%{__scm_author}"; }
 
@@ -390,6 +386,9 @@ make test ARGS=-V
 
 
 %changelog
+* Fri Sep 13 2019 Jason L Tibbitts III <tibbs@math.uh.edu> - 2.1.0-1
+- Update to 2.1.0.
+
 * Fri Sep 06 2019 Jason L Tibbitts III <tibbs@math.uh.edu> - 2.1.0~rc0-2
 - Temporarily disable build on s390x because of a new bug in the code upstream:
   https://github.com/prusa3d/PrusaSlicer/issues/2879
