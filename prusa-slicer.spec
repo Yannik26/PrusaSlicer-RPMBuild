@@ -24,6 +24,11 @@ Source2:        %name.appdata.xml
 # https://github.com/prusa3d/PrusaSlicer/issues/2879
 ExcludeArch: s390x
 
+# Highly-parallel uild can run out of memory on PPC64le
+%ifarch ppc64le
+%global _smp_ncpus_max 8
+%endif
+
 BuildRequires:  boost-devel
 BuildRequires:  cmake
 BuildRequires:  cereal-devel
