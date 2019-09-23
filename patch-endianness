@@ -1,0 +1,26 @@
+diff --git a/src/admesh/stlinit.cpp b/src/admesh/stlinit.cpp
+index 693aad0..390fe56 100644
+--- a/src/admesh/stlinit.cpp
++++ b/src/admesh/stlinit.cpp
+@@ -36,6 +36,10 @@
+ #error "SEEK_SET not defined"
+ #endif
+ 
++#ifndef BOOST_LITTLE_ENDIAN
++extern void stl_internal_reverse_quads(char *buf, size_t cnt);
++#endif /* BOOST_LITTLE_ENDIAN */
++
+ static FILE* stl_open_count_facets(stl_file *stl, const char *file) 
+ {
+   	// Open the file in binary mode first.
+@@ -238,10 +242,6 @@ bool stl_open(stl_file *stl, const char *file)
+   	return result;
+ }
+ 
+-#ifndef BOOST_LITTLE_ENDIAN
+-extern void stl_internal_reverse_quads(char *buf, size_t cnt);
+-#endif /* BOOST_LITTLE_ENDIAN */
+-
+ void stl_allocate(stl_file *stl) 
+ {
+   	//  Allocate memory for the entire .STL file.

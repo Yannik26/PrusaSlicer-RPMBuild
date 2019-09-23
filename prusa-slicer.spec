@@ -3,7 +3,7 @@
 
 Name:           prusa-slicer
 Version:        2.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -20,9 +20,14 @@ Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_%version.
 Source1:        %name.desktop
 Source2:        %name.appdata.xml
 
-# The source fails to build on s390x, so disable it temporarily; see
+# Fix building on s390x
 # https://github.com/prusa3d/PrusaSlicer/issues/2879
-ExcludeArch: s390x
+Patch0:         https://github.com/prusa3d/PrusaSlicer/commit/94212fa2a92b5d01be5da8235f02423249dd7b2a.patch
+
+# Try to fix more endian-related compilation errors
+# https://github.com/prusa3d/PrusaSlicer/issues/2879
+# https://github.com/prusa3d/PrusaSlicer/pull/2981
+Patch1:         patch-endianness
 
 # Highly-parallel uild can run out of memory on PPC64le
 %ifarch ppc64le
@@ -395,6 +400,9 @@ make test ARGS=-V
 
 
 %changelog
+* Mon Sep 23 2019 Jason L Tibbitts III <tibbs@math.uh.edu> - 2.1.0-2
+- Fix the s390x build and re-enable it.
+
 * Fri Sep 13 2019 Jason L Tibbitts III <tibbs@math.uh.edu> - 2.1.0-1
 - Update to 2.1.0.
 
