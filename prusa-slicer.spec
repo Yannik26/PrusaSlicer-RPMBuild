@@ -2,8 +2,8 @@
 %bcond_without perltests
 
 Name:           prusa-slicer
-Version:        2.1.0
-Release:        2%{?dist}
+Version:        2.1.1
+Release:        1%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -400,6 +400,9 @@ make test ARGS=-V
 
 
 %changelog
+* Thu Jan 02 2020 Jason L Tibbitts III <tibbs@math.uh.edu> - 2.1.1-1
+- Update to 2.1.1.
+
 * Mon Sep 23 2019 Jason L Tibbitts III <tibbs@math.uh.edu> - 2.1.0-2
 - Fix the s390x build and re-enable it.
 
