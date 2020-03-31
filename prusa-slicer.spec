@@ -397,7 +397,7 @@ make test ARGS=-V
 
 
 %changelog
-* Thu Mar 30 2020 Alexander Jacocks <alexander@redhat.com> - 2.2.0-1
+* Tue Mar 31 2020 Alexander Jacocks <alexander@redhat.com> - 2.2.0-1
 - Update to 2.2.0.
 
 * Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.1.1-2
