@@ -2,8 +2,8 @@
 %bcond_without perltests
 
 Name:           prusa-slicer
-Version:        2.1.1
-Release:        2%{?dist}
+Version:        2.2.0
+Release:        1%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -20,15 +20,6 @@ Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_%version.
 Source1:        %name.desktop
 Source2:        %name.appdata.xml
 
-# Fix building on s390x
-# https://github.com/prusa3d/PrusaSlicer/issues/2879
-Patch0:         https://github.com/prusa3d/PrusaSlicer/commit/94212fa2a92b5d01be5da8235f02423249dd7b2a.patch
-
-# Try to fix more endian-related compilation errors
-# https://github.com/prusa3d/PrusaSlicer/issues/2879
-# https://github.com/prusa3d/PrusaSlicer/pull/2981
-Patch1:         patch-endianness
-
 # Highly-parallel uild can run out of memory on PPC64le
 %ifarch ppc64le
 %global _smp_ncpus_max 8
@@ -37,6 +28,7 @@ Patch1:         patch-endianness
 BuildRequires:  boost-devel
 BuildRequires:  cmake
 BuildRequires:  cereal-devel
+BuildRequires:  CGAL-devel
 BuildRequires:  curl-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  eigen3-devel
@@ -46,9 +38,14 @@ BuildRequires:  gettext
 BuildRequires:  git-core
 BuildRequires:  glew-devel
 BuildRequires:  gtest-devel
+BuildRequires:  ilmbase-devel
 BuildRequires:  ImageMagick
+BuildRequires:  libgudev
 BuildRequires:  miniz-devel
 BuildRequires:  NLopt-devel
+BuildRequires:  openvdb
+BuildRequires:  openvdb-devel
+BuildRequires:  systemd-devel
 BuildRequires:  tbb-devel
 BuildRequires:  wxBase3-devel
 BuildRequires:  wxGTK3-devel
@@ -396,10 +393,13 @@ make test ARGS=-V
 %_datadir/applications/%name.desktop
 %_datadir/appdata/%name.appdata.xml
 %dir %_datadir/PrusaSlicer
-%_datadir/PrusaSlicer/{icons,models,profiles,shaders}/
+%_datadir/PrusaSlicer/{icons,models,profiles,shaders,udev}/
 
 
 %changelog
+* Thu Mar 30 2020 Alexander Jacocks <alexander@redhat.com> - 2.2.0-1
+- Update to 2.2.0.
+
 * Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.1.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
