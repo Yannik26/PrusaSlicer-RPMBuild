@@ -3,7 +3,7 @@
 
 Name:           prusa-slicer
 Version:        2.2.0
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -19,11 +19,6 @@ URL:            https://github.com/prusa3d/PrusaSlicer/
 Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_%version.tar.gz
 Source1:        %name.desktop
 Source2:        %name.appdata.xml
-
-# Boost 1.73 support
-# https://bugzilla.redhat.com/show_bug.cgi?id=1842011
-# https://github.com/prusa3d/PrusaSlicer/issues/4264
-Patch1:         https://github.com/kobboi/PrusaSlicer/commit/d982345f.patch#/boost-1.73.patch
 
 # Highly-parallel uild can run out of memory on PPC64le
 %ifarch ppc64le
@@ -402,9 +397,6 @@ make test ARGS=-V
 
 
 %changelog
-* Mon Jun 01 2020 Miro Hrončok <mhroncok@redhat.com> - 2.2.0-2
-- Rebuilt and fix for Boost 1.73.0 (#1842011)
-
 * Tue Mar 31 2020 Alexander Jacocks <alexander@redhat.com> - 2.2.0-1
 - Update to 2.2.0.
 
