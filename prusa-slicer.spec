@@ -217,6 +217,9 @@ Obsoletes: slic3r-prusa3d < 1.41.3-2
 Provides: slic3r-prusa3d = %version-%release
 %endif
 
+# Get Fedora 33++ behavior on anything older
+%undefine __cmake_in_source_build
+
 %description
 PrusaSlicer takes 3D models (STL, OBJ, AMF) and converts them into G-code
 instructions for FFF printers or PNG layers for mSLA 3D printers. It's
@@ -290,20 +293,16 @@ commit "Remove xfail tests."
 
 
 %build
-mkdir Build
-pushd Build
-
 # -DSLIC3R_PCH=0 - Disable precompiled headers, which break cmake for some reason
 # -DSLIC3R_FHS=1 - Enable FHS layout instead of installing things into the resources directory
 # -DSLIC3R_WX_STABLE=1 - Allow use of wxGTK version 3.0 instead of 3.1.
-%cmake .. -DSLIC3R_PCH=0 -DSLIC3R_FHS=1 -DSLIC3R_WX_STABLE=1 -DSLIC3R_GTK=3 \
+%cmake -DSLIC3R_PCH=0 -DSLIC3R_FHS=1 -DSLIC3R_WX_STABLE=1 -DSLIC3R_GTK=3 \
     -DSLIC3R_BUILD_TESTS=1 -DCMAKE_BUILD_TYPE=Release \
 %if %{with perltests}
     -DSLIC3R_PERL_XS=1
 %endif
 
-%make_build
-popd
+%cmake_build
 
 # Extract multiple sizes of PNG from the included .ico file.  The order of
 # extracted files can change, so a bit of magic is required to get stable
@@ -325,9 +324,7 @@ popd
 
 
 %install
-pushd Build
-%make_install
-popd
+%cmake_install
 
 # Since the binary segfaults under Wayland, we have to wrap it.
 mv %buildroot%_bindir/prusa-slicer %buildroot%_bindir/prusa-slicer.wrapped
@@ -386,8 +383,7 @@ find %buildroot%_datadir/PrusaSlicer/localization -type d | sed '
 # Some tests are Perl but there is a framework for other tests even though
 # currently the only thing that uses them is one of the bundled libraries.
 # There's no reason not to run as much as we can.
-pushd Build
-make test ARGS=-V
+%cmake_build -- test ARGS=-V
 
 
 %files -f license-files -f lang-files
