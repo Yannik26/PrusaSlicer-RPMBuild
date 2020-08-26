@@ -1,9 +1,14 @@
 # Currently all of the test suite requires the old Perl infrastructure to run.
+# When building flatpak, tests have to be disabled by default due to some missing dependencies.
+%if 0%{?flatpak}
+%bcond_with perltests
+%else
 %bcond_without perltests
+%endif
 
 Name:           prusa-slicer
 Version:        2.2.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -352,8 +357,11 @@ desktop-file-install --dir=%buildroot%_datadir/applications %SOURCE1
 # we want the test suite to run.  It could be placed into a subpackage, but
 # nothing needs it currently and it would conflict with the other slic3r
 # package.
-rm -rf %buildroot/%perl_vendorarch
-rm -rf %buildroot/%perl_vendorlib
+#
+# The %%perl_vendorarch and %%perl_vendorlib can be undefined,
+# which would cause deleting of the whole buildroot.
+%{?perl_vendorarch:rm -rf %buildroot/%perl_vendorarch}
+%{?perl_vendorlib:rm -rf %buildroot/%perl_vendorlib}
 
 # Upstream installs the translation source files when they probably shouldn't
 ls -lR %buildroot%_datadir/PrusaSlicer/localization
@@ -404,6 +412,11 @@ find %buildroot%_datadir/PrusaSlicer/localization -type d | sed '
 
 
 %changelog
+* Wed Aug 26 2020 Jan Beran <jaberan@redhat.com> - 2.2.0-6
+- Add fixes for the flatpak build:
+  disable perltests by default when building flatpak
+  don't remove Perl modules when building without perltests
+
 * Mon Aug 24 2020 Miro Hrončok <mhroncok@redhat.com> - 2.2.0-5
 - Rebuilt for openvdb 7.1
 
