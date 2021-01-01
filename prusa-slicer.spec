@@ -8,7 +8,7 @@
 
 Name:           prusa-slicer
 Version:        2.2.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -412,6 +412,9 @@ find %buildroot%_datadir/PrusaSlicer/localization -type d | sed '
 
 
 %changelog
+* Fri Jan 01 2021 Richard Shaw <hobbes1069@gmail.com> - 2.2.0-7
+- Rebuild for OpenEXR 2.5.3.
+
 * Wed Aug 26 2020 Jan Beran <jaberan@redhat.com> - 2.2.0-6
 - Add fixes for the flatpak build:
   disable perltests by default when building flatpak
