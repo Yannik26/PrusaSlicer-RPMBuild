@@ -31,6 +31,11 @@ Source2:        %name.appdata.xml
 # https://github.com/prusa3d/PrusaSlicer/pull/4340
 Patch1:         endian.patch
 
+# Include <atomic> for std::atomic where needed
+# Fixes build with Boost 1.75
+# https://github.com/prusa3d/PrusaSlicer/commit/44f71f0ed1
+Patch2:         atomic.patch
+
 # Highly-parallel uild can run out of memory on PPC64le
 %ifarch ppc64le
 %global _smp_ncpus_max 8
