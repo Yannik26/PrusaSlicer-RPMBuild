@@ -7,8 +7,8 @@
 %endif
 
 Name:           prusa-slicer
-Version:        2.2.0
-Release:        12%{?dist}
+Version:        2.3.1
+Release:        1%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -25,16 +25,9 @@ Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_%version.
 Source1:        %name.desktop
 Source2:        %name.appdata.xml
 
-# Boost 1.73 support
-# https://bugzilla.redhat.com/show_bug.cgi?id=1842011
-# https://github.com/prusa3d/PrusaSlicer/issues/4264
-# https://github.com/prusa3d/PrusaSlicer/pull/4340
-Patch1:         endian.patch
-
-# Include <atomic> for std::atomic where needed
-# Fixes build with Boost 1.75
-# https://github.com/prusa3d/PrusaSlicer/commit/44f71f0ed1
-Patch2:         atomic.patch
+# Added missing include (GCC 11.1)
+# https://github.com/prusa3d/PrusaSlicer/commit/62592cab48cfb6a20d84041b1992aecc6a2b659c
+Patch1:         optional.patch
 
 # Highly-parallel uild can run out of memory on PPC64le
 %ifarch ppc64le
@@ -410,6 +403,10 @@ find %buildroot%_datadir/PrusaSlicer/localization -type d | sed '
 
 
 %changelog
+* Sat May 15 2021 Dennis Gilmore <dennis@ausil.us> - 2.3.1-1
+- update to 2.3.1
+- include upstream patch fixing build with gcc 11
+
 * Mon May 10 2021 Jonathan Wakely <jwakely@redhat.com> - 2.2.0-12
 - Rebuilt for removed libstdc++ symbols (#1937698)
 
