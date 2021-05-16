@@ -29,6 +29,10 @@ Source2:        %name.appdata.xml
 # https://github.com/prusa3d/PrusaSlicer/commit/62592cab48cfb6a20d84041b1992aecc6a2b659c
 Patch1:         optional.patch
 
+# Fix build error with non-const MINSIGSTKSZ
+# https://github.com/prusa3d/PrusaSlicer/pull/6518
+Patch2:         0001-Fix-build-error-with-non-const-MINSIGSTKSZ.patch
+
 # Highly-parallel uild can run out of memory on PPC64le
 %ifarch ppc64le
 %global _smp_ncpus_max 8
@@ -382,6 +386,10 @@ find %buildroot%_datadir/PrusaSlicer/localization -type d | sed '
     s:\(.*\):%dir \1:
 ' >> lang-files
 
+# remove the flatpak data on non flatpak builds
+%if 0%{?flatpak}
+rm -rf %buildroot%_datadir/PrusaSlicer/data/
+%endif
 
 %check
 # Some tests are Perl but there is a framework for other tests even though
@@ -394,13 +402,17 @@ find %buildroot%_datadir/PrusaSlicer/localization -type d | sed '
 %license LICENSE
 %doc README.md
 %_bindir/%name
+%_bindir/prusa-gcodeviewer
 %_bindir/%name.wrapped
 %_datadir/icons/hicolor/*/apps/%name.png
 %_datadir/applications/%name.desktop
 %_datadir/appdata/%name.appdata.xml
 %dir %_datadir/PrusaSlicer
-%_datadir/PrusaSlicer/{icons,models,profiles,shaders,udev}/
-
+%if 0%{?flatpak}
+%_datadir/PrusaSlicer/{icons,models,profiles,shaders,udev,applications}/
+%else
+%_datadir/PrusaSlicer/{icons,models,profiles,shaders,udev,applications,data}/
+%endif
 
 %changelog
 * Sat May 15 2021 Dennis Gilmore <dennis@ausil.us> - 2.3.1-1

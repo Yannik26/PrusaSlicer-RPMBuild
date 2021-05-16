@@ -1,0 +1,29 @@
+From 581fef448d1afb1dc89199848dcccaee2e8a5c89 Mon Sep 17 00:00:00 2001
+From: Dennis Gilmore <dennis@ausil.us>
+Date: Sat, 15 May 2021 22:04:55 -0500
+Subject: [PATCH] Fix build error with non-const MINSIGSTKSZ.
+
+see https://github.com/catchorg/Catch2/issues/2178
+
+Signed-off-by: Dennis Gilmore <dennis@ausil.us>
+---
+ tests/catch2/catch.hpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tests/catch2/catch.hpp b/tests/catch2/catch.hpp
+index 282d1562c..a8c71c864 100644
+--- a/tests/catch2/catch.hpp
++++ b/tests/catch2/catch.hpp
+@@ -10819,7 +10819,8 @@ namespace Catch {
+ 
+     // 32kb for the alternate stack seems to be sufficient. However, this value
+     // is experimentally determined, so that's not guaranteed.
+-    static constexpr std::size_t sigStackSize = 32768 >= MINSIGSTKSZ ? 32768 : MINSIGSTKSZ;
++    // Update: MINSIGSTKSZ is not const anymore with recent glibc
++    static constexpr std::size_t sigStackSize = 32768;
+ 
+     static SignalDefs signalDefs[] = {
+         { SIGINT,  "SIGINT - Terminal interrupt signal" },
+-- 
+2.31.1
+
