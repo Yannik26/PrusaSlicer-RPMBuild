@@ -8,7 +8,7 @@
 
 Name:           prusa-slicer
 Version:        2.3.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -32,6 +32,15 @@ Patch1:         optional.patch
 # Fix build error with non-const MINSIGSTKSZ
 # https://github.com/prusa3d/PrusaSlicer/pull/6518
 Patch2:         0001-Fix-build-error-with-non-const-MINSIGSTKSZ.patch
+
+
+# Beware!
+# Patches >= 340 are only applied on Fedora 34+
+# Patches >= 350 are only applied on Fedora 35+
+# ...
+
+# OpenEXR 3 fixes
+Patch351:       https://github.com/archlinux/svntogit-community/blob/1dea61c0b5/trunk/prusa-slicer-openexr3.patch
 
 # Highly-parallel uild can run out of memory on PPC64le
 %ifarch ppc64le
@@ -237,7 +246,9 @@ community.
 
 
 %prep
-%autosetup -S git -n PrusaSlicer-version_%version
+%autosetup -S git -n PrusaSlicer-version_%version -N
+# Apply patches, but only apply 340+ on Fedora 34, 350+ on Fedora 35, etc...
+%autopatch -M %[%{?fedora} * 10 + 9]
 
 commit () { git commit -q -a -m "$1" --author "%{__scm_author}"; }
 
@@ -415,6 +426,9 @@ rm -rf %buildroot%_datadir/PrusaSlicer/data/
 %endif
 
 %changelog
+* Mon Aug 02 2021 Miro Hrončok <mhroncok@redhat.com> - 2.3.1-4
+- Rebuilt for OpenEXR 3
+
 * Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
