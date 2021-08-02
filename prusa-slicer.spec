@@ -162,13 +162,6 @@ Provides: bundled(imgui) = 1.66
 # License: MIT
 Provides: bundled(mesa-libGLU)
 
-%if %{?fedora <= 30}
-# For <= F30, the system miniz is too old to be used.  The bundled library is a
-# fork from somewhere around 2.0.6, with various C++ source files added.
-# License: MIT and Unlicense
-Provides: bundled(miniz) = 2.0.6
-%endif
-
 # A header-only library, developed by one of the authors of PrusaSlicer.  Not
 # packaged in Fedora, but could be (for little benefit).
 # None of the source files carry licensing information, but a file LICENSE.txt
@@ -224,12 +217,9 @@ Provides: bundled(shinyprofiler) = 2.6~rc1
 # In case someone tries to install the upstream name
 Provides: PrusaSlicer = %version-%release
 
-# Because the old profiles are not compatible, don't replace slic3r-prusa3d
-# until F31.  Both packages can be installed and used in parallel
-%if %{?fedora} >= 31
+# The package was renamed after version 2
 Obsoletes: slic3r-prusa3d < 1.41.3-2
 Provides: slic3r-prusa3d = %version-%release
-%endif
 
 # Get Fedora 33++ behavior on anything older
 %undefine __cmake_in_source_build
@@ -256,12 +246,6 @@ commit () { git commit -q -a -m "$1" --author "%{__scm_author}"; }
 sed -i 's/UNKNOWN/Fedora/' version.inc
 commit "Fix version string"
 
-# F29 has the nlopt library under a different name
-%if %{?fedora} < 30
-sed -ri 's/^(.*_NLopt_LIB_NAMES "nlopt)(".*)$/\1_cxx\2/' src/libnest2d/cmake_modules/FindNLopt.cmake
-commit "Fix name of nlopt library"
-%endif
-
 # Copy out specific license files so we can reference them later.
 license () { mv src/$1/$2 $2-$1; git add $2-$1; echo %%license $2-$1 >> license-files; }
 license agg copying
@@ -285,21 +269,11 @@ unbundle () {
 unbundle eigen
 unbundle expat
 unbundle glew
+unbundle miniz
 
 # Upstream says this is obsolete, but it's still needed for compilation.
 # The Fedora version appears to work fine for that purpose so we'll use it.
 unbundle poly2tri
-
-# The miniz in F30 is too old to unbundle.
-# The sed could be a patch, but conditionally applying patches is problematic
-# and this will be fixed upstream in the next release.
-%if %{?fedora} >= 31
-unbundle miniz
-#sed -i 's/^#include.*miniz.*/#include <miniz.h>/' \
-#    src/libslic3r/Format/{3mf.cpp,AMF.cpp,PRUS.cpp} \
-#    src/libslic3r/Zipper.cpp
-#commit "Fix miniz includes"
-%endif
 
 # These tests were fixed but the fixes were undone upsteam with commit ac6969c
 # https://github.com/prusa3d/PrusaSlicer/issues/2288
