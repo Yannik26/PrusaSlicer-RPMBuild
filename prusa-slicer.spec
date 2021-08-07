@@ -8,7 +8,7 @@
 
 Name:           prusa-slicer
 Version:        2.3.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -400,6 +400,9 @@ rm -rf %buildroot%_datadir/PrusaSlicer/data/
 %endif
 
 %changelog
+* Sat Aug 07 2021 Jonathan Wakely <jwakely@redhat.com> - 2.3.1-5
+- Rebuilt for Boost 1.76
+
 * Mon Aug 02 2021 Miro Hrončok <mhroncok@redhat.com> - 2.3.1-4
 - Rebuilt for OpenEXR 3
 
