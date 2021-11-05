@@ -47,11 +47,6 @@ Patch351:       https://github.com/archlinux/svntogit-community/blob/1dea61c0b5/
 %global _smp_ncpus_max 8
 %endif
 
-# See https://bugzilla.redhat.com/show_bug.cgi?id=1865257
-%ifarch %{arm}
-%global _lto_cflags %{nil}
-%endif
-
 BuildRequires:  boost-devel
 BuildRequires:  cmake
 BuildRequires:  cereal-devel
