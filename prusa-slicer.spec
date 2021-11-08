@@ -7,8 +7,8 @@
 %endif
 
 Name:           prusa-slicer
-Version:        2.3.1
-Release:        5%{?dist}
+Version:        2.3.3
+Release:        1%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -25,13 +25,9 @@ Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_%version.
 Source1:        %name.desktop
 Source2:        %name.appdata.xml
 
-# Added missing include (GCC 11.1)
-# https://github.com/prusa3d/PrusaSlicer/commit/62592cab48cfb6a20d84041b1992aecc6a2b659c
-Patch1:         optional.patch
-
 # Fix build error with non-const MINSIGSTKSZ
 # https://github.com/prusa3d/PrusaSlicer/pull/6518
-Patch2:         0001-Fix-build-error-with-non-const-MINSIGSTKSZ.patch
+Patch1:         0001-Fix-build-error-with-non-const-MINSIGSTKSZ.patch
 
 
 # Beware!
@@ -395,6 +391,10 @@ rm -rf %buildroot%_datadir/PrusaSlicer/data/
 %endif
 
 %changelog
+* Mon Nov 08 2021 Dennis Gilmore <dennis@ausil.us> - 2.3.3-1
+- update to 2.3.3
+- remove upstreamed gcc patch
+
 * Sat Aug 07 2021 Jonathan Wakely <jwakely@redhat.com> - 2.3.1-5
 - Rebuilt for Boost 1.76
 
