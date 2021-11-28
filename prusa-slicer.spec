@@ -8,7 +8,7 @@
 
 Name:           prusa-slicer
 Version:        2.3.1
-Release:        1%{?dist}
+Release:        1%{?dist}.1
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -415,6 +415,9 @@ rm -rf %buildroot%_datadir/PrusaSlicer/data/
 %endif
 
 %changelog
+* Sun Nov 28 2021 Mamoru TASAKA <mtasaka@fedoraproject.org> - 2.3.1-1.1
+- Rebuild for openvdb 9
+
 * Sat May 15 2021 Dennis Gilmore <dennis@ausil.us> - 2.3.1-1
 - update to 2.3.1
 - include upstream patch fixing build with gcc 11
