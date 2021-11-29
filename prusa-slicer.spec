@@ -7,8 +7,8 @@
 %endif
 
 Name:           prusa-slicer
-Version:        2.3.1
-Release:        1%{?dist}.1
+Version:        2.2.0
+Release:        11%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -25,13 +25,16 @@ Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_%version.
 Source1:        %name.desktop
 Source2:        %name.appdata.xml
 
-# Added missing include (GCC 11.1)
-# https://github.com/prusa3d/PrusaSlicer/commit/62592cab48cfb6a20d84041b1992aecc6a2b659c
-Patch1:         optional.patch
+# Boost 1.73 support
+# https://bugzilla.redhat.com/show_bug.cgi?id=1842011
+# https://github.com/prusa3d/PrusaSlicer/issues/4264
+# https://github.com/prusa3d/PrusaSlicer/pull/4340
+Patch1:         endian.patch
 
-# Fix build error with non-const MINSIGSTKSZ
-# https://github.com/prusa3d/PrusaSlicer/pull/6518
-Patch2:         0001-Fix-build-error-with-non-const-MINSIGSTKSZ.patch
+# Include <atomic> for std::atomic where needed
+# Fixes build with Boost 1.75
+# https://github.com/prusa3d/PrusaSlicer/commit/44f71f0ed1
+Patch2:         atomic.patch
 
 # Highly-parallel uild can run out of memory on PPC64le
 %ifarch ppc64le
@@ -386,10 +389,6 @@ find %buildroot%_datadir/PrusaSlicer/localization -type d | sed '
     s:\(.*\):%dir \1:
 ' >> lang-files
 
-# remove the flatpak data on non flatpak builds
-%if 0%{?flatpak}
-rm -rf %buildroot%_datadir/PrusaSlicer/data/
-%endif
 
 %check
 # Some tests are Perl but there is a framework for other tests even though
@@ -402,29 +401,15 @@ rm -rf %buildroot%_datadir/PrusaSlicer/data/
 %license LICENSE
 %doc README.md
 %_bindir/%name
-%_bindir/prusa-gcodeviewer
 %_bindir/%name.wrapped
 %_datadir/icons/hicolor/*/apps/%name.png
 %_datadir/applications/%name.desktop
 %_datadir/appdata/%name.appdata.xml
 %dir %_datadir/PrusaSlicer
-%if 0%{?flatpak}
-%_datadir/PrusaSlicer/{icons,models,profiles,shaders,udev,applications}/
-%else
-%_datadir/PrusaSlicer/{icons,models,profiles,shaders,udev,applications,data}/
-%endif
+%_datadir/PrusaSlicer/{icons,models,profiles,shaders,udev}/
+
 
 %changelog
-* Sun Nov 28 2021 Mamoru TASAKA <mtasaka@fedoraproject.org> - 2.3.1-1.1
-- Rebuild for openvdb 9
-
-* Sat May 15 2021 Dennis Gilmore <dennis@ausil.us> - 2.3.1-1
-- update to 2.3.1
-- include upstream patch fixing build with gcc 11
-
-* Mon May 10 2021 Jonathan Wakely <jwakely@redhat.com> - 2.2.0-12
-- Rebuilt for removed libstdc++ symbols (#1937698)
-
 * Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.2.0-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
