@@ -8,7 +8,7 @@
 
 Name:           prusa-slicer
 Version:        2.3.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -42,6 +42,10 @@ Patch351:       https://github.com/archlinux/svntogit-community/blob/1dea61c0b5/
 %ifarch ppc64le
 %global _smp_ncpus_max 8
 %endif
+
+# Workaround for https://github.com/prusa3d/PrusaSlicer/issues/7231
+#                https://bugzilla.redhat.com/show_bug.cgi?id=2023345
+%global optflags %(echo '%optflags' | sed s/-Wp,-D_GLIBCXX_ASSERTIONS//)
 
 BuildRequires:  boost-devel
 BuildRequires:  cmake
@@ -391,6 +395,10 @@ rm -rf %buildroot%_datadir/PrusaSlicer/data/
 %endif
 
 %changelog
+* Tue Nov 30 2021 Miro Hrončok <mhroncok@redhat.com> - 2.3.3-3
+- Disable GLIBCXX_ASSERTIONS
+- Fixes rhbz#2023345
+
 * Sun Nov 28 2021 Richard Shaw <hobbes1069@gmail.com> - 2.3.3-2
 - Rebuild for OpenVDB 9.
 
