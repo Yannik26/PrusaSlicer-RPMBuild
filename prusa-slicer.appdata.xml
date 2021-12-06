@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application>
-    <id type="desktop">prusa-slicer.desktop</id>
+    <id type="desktop">PrusaSlicer.desktop</id>
     <metadata_license>0BSD</metadata_license>
     <project_licence>AGPLv3</project_licence>
     <summary>3D printing slicer optimized for Prusa printers</summary>

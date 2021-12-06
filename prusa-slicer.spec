@@ -22,10 +22,9 @@ Summary:        3D printing slicer optimized for Prusa printers
 License:        AGPLv3
 URL:            https://github.com/prusa3d/PrusaSlicer/
 Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_%version.tar.gz
-Source1:        %name.desktop
 Source2:        %name.appdata.xml
 
-Patch1:		prusa-slicer-no-cereal-lib.patch
+Patch1:         prusa-slicer-no-cereal-lib.patch
 
 # Beware!
 # Patches >= 340 are only applied on Fedora 34+
@@ -71,6 +70,9 @@ BuildRequires:  wxGTK3-devel
 #BuildRequires:  polyclipping-devel >= 6.2.0
 #BuildRequires:  boost-nowide-devel
 #BuildRequires:  qhull-devel
+
+# For the %%_udevrulesdir macro
+BuildRequires:  systemd
 
 %if %{with perltests}
 # All of the old Perl dependencies needed to run the test suite
@@ -149,6 +151,7 @@ Provides: bundled(imgui) = 1.66
 Provides: bundled(mesa-libGLU)
 
 # PrusaResearch added functions to the upstream miniz. Yay.
+# See https://github.com/prusa3d/PrusaSlicer/issues/7080
 # License: MIT
 Provides: bundled(miniz) = 2.1.0prusa
 
@@ -278,20 +281,6 @@ commit "Remove xfail tests."
 %endif
 
 %cmake_build
-
-# Extract multiple sizes of PNG from the included .ico file.  The order of
-# extracted files can change, so a bit of magic is required to get stable
-# filenames.
-mkdir hicolor
-pushd hicolor
-convert -set filename:dim '%%wx%%h' ../resources/icons/PrusaSlicer.ico %name-%%[filename:dim].png
-for res in 16 32 48 64 128 256; do
-    mkdir -p ${res}x${res}/apps
-    cp %name-${res}x${res}.png ${res}x${res}/apps/%name.png
-done
-rm %name-*.png
-popd
-
 # To avoid "iCCP: Not recognized known sRGB profile that has been edited"
 pushd resources/icons
 find . -type f -name "*.png" -exec convert {} -strip {} \;
@@ -310,13 +299,8 @@ exec %_bindir/prusa-slicer.wrapped "$@"
 END
 chmod 755 %buildroot%_bindir/prusa-slicer
 
-mkdir -p %buildroot%_datadir/icons/hicolor/
-cp -r hicolor/* %buildroot%_datadir/icons/hicolor/
-
 mkdir -p %buildroot%_datadir/appdata
 install -m 644 %SOURCE2 %buildroot%_datadir/appdata/%name.appdata.xml
-
-desktop-file-install --dir=%buildroot%_datadir/applications %SOURCE1
 
 # For now, delete the Perl module that gets installed.  It only exists because
 # we want the test suite to run.  It could be placed into a subpackage, but
@@ -362,6 +346,8 @@ rm -rf %buildroot%_datadir/PrusaSlicer/data/
 %endif
 
 %check
+desktop-file-validate %buildroot%_datadir/applications/PrusaGcodeviewer.desktop
+
 # Some tests are Perl but there is a framework for other tests even though
 # currently the only thing that uses them is one of the bundled libraries.
 # There's no reason not to run as much as we can.
@@ -374,15 +360,17 @@ rm -rf %buildroot%_datadir/PrusaSlicer/data/
 %_bindir/%name
 %_bindir/prusa-gcodeviewer
 %_bindir/%name.wrapped
-%_datadir/icons/hicolor/*/apps/%name.png
-%_datadir/applications/%name.desktop
+%_datadir/icons/hicolor/*/apps/PrusaSlicer*.png
+%_datadir/applications/PrusaGcodeviewer.desktop
+%_datadir/applications/PrusaSlicer.desktop
 %_datadir/appdata/%name.appdata.xml
 %dir %_datadir/PrusaSlicer
 %if 0%{?flatpak}
-%_datadir/PrusaSlicer/{icons,models,profiles,shaders,udev,applications}/
+%_datadir/PrusaSlicer/{icons,models,profiles,shaders,shapes,udev,applications}/
 %else
-%_datadir/PrusaSlicer/{icons,models,profiles,shaders,udev,applications,data}/
+%_datadir/PrusaSlicer/{icons,models,profiles,shaders,shapes,udev,applications,data}/
 %endif
+%_udevrulesdir/90-3dconnexion.rules
 
 %changelog
 * Mon Feb 14 2022 Tom Callaway <spot@fedoraproject.org> - 2.4.0-1
