@@ -7,8 +7,8 @@
 %endif
 
 Name:           prusa-slicer
-Version:        2.3.3
-Release:        5%{?dist}
+Version:        2.4.0
+Release:        1%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -25,10 +25,7 @@ Source0:        https://github.com/prusa3d/PrusaSlicer/archive/version_%version.
 Source1:        %name.desktop
 Source2:        %name.appdata.xml
 
-# Fix build error with non-const MINSIGSTKSZ
-# https://github.com/prusa3d/PrusaSlicer/pull/6518
-Patch1:         0001-Fix-build-error-with-non-const-MINSIGSTKSZ.patch
-
+Patch1:		prusa-slicer-no-cereal-lib.patch
 
 # Beware!
 # Patches >= 340 are only applied on Fedora 34+
@@ -63,7 +60,8 @@ BuildRequires:  gtest-devel
 BuildRequires:  ilmbase-devel
 BuildRequires:  ImageMagick
 BuildRequires:  libgudev
-BuildRequires:  miniz-devel
+# Upstream miniz is no longer compatible, gotta use the fork.
+# BuildRequires:  miniz-devel
 BuildRequires:  NLopt-devel
 BuildRequires:  openvdb
 BuildRequires:  openvdb-devel
@@ -71,9 +69,6 @@ BuildRequires:  systemd-devel
 BuildRequires:  tbb-devel
 BuildRequires:  wxBase3-devel
 BuildRequires:  wxGTK3-devel
-
-# Upstream says this is obsolete, but still needed to compile
-BuildRequires:  poly2tri-devel
 
 # Things we wish we could unbundle
 #BuildRequires:  admesh-devel >= 0.98.1
@@ -156,6 +151,10 @@ Provides: bundled(imgui) = 1.66
 # The files are in src/glu-libtess.
 # License: MIT
 Provides: bundled(mesa-libGLU)
+
+# PrusaResearch added functions to the upstream miniz. Yay.
+# License: MIT
+Provides: bundled(miniz) = 2.1.0prusa
 
 # A header-only library, developed by one of the authors of PrusaSlicer.  Not
 # packaged in Fedora, but could be (for little benefit).
@@ -264,11 +263,6 @@ unbundle () {
 unbundle eigen
 unbundle expat
 unbundle glew
-unbundle miniz
-
-# Upstream says this is obsolete, but it's still needed for compilation.
-# The Fedora version appears to work fine for that purpose so we'll use it.
-unbundle poly2tri
 
 # These tests were fixed but the fixes were undone upsteam with commit ac6969c
 # https://github.com/prusa3d/PrusaSlicer/issues/2288
@@ -395,6 +389,9 @@ rm -rf %buildroot%_datadir/PrusaSlicer/data/
 %endif
 
 %changelog
+* Mon Feb 14 2022 Tom Callaway <spot@fedoraproject.org> - 2.4.0-1
+- update to 2.4.0
+
 * Thu Feb 10 2022 Orion Poplawski <orion@nwra.com> - 2.3.3-5
 - Rebuild for glew 2.2
 
