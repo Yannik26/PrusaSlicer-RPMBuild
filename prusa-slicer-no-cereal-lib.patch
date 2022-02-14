@@ -1,0 +1,35 @@
+diff -up PrusaSlicer-version_2.4.0/src/libslic3r/CMakeLists.txt.no-cereal-lib PrusaSlicer-version_2.4.0/src/libslic3r/CMakeLists.txt
+--- PrusaSlicer-version_2.4.0/src/libslic3r/CMakeLists.txt.no-cereal-lib	2022-02-11 20:07:36.399806933 +0000
++++ PrusaSlicer-version_2.4.0/src/libslic3r/CMakeLists.txt	2022-02-11 20:14:53.806895641 +0000
+@@ -335,7 +335,6 @@ target_include_directories(libslic3r PUB
+ target_link_libraries(libslic3r
+     libnest2d
+     admesh
+-    cereal
+     libigl
+     miniz
+     boost_libs
+diff -up PrusaSlicer-version_2.4.0/src/CMakeLists.txt.no-cereal-lib PrusaSlicer-version_2.4.0/src/CMakeLists.txt
+--- PrusaSlicer-version_2.4.0/src/CMakeLists.txt.no-cereal-lib	2022-02-11 20:31:04.581810442 +0000
++++ PrusaSlicer-version_2.4.0/src/CMakeLists.txt	2022-02-11 20:31:15.726430666 +0000
+@@ -125,7 +125,7 @@ if (NOT WIN32 AND NOT APPLE)
+     set_target_properties(PrusaSlicer PROPERTIES OUTPUT_NAME "prusa-slicer")
+ endif ()
+ 
+-target_link_libraries(PrusaSlicer libslic3r cereal)
++target_link_libraries(PrusaSlicer libslic3r)
+ if (APPLE)
+ #    add_compile_options(-stdlib=libc++)
+ #    add_definitions(-DBOOST_THREAD_DONT_USE_CHRONO -DBOOST_NO_CXX11_RVALUE_REFERENCES -DBOOST_THREAD_USES_MOVE)
+diff -up PrusaSlicer-version_2.4.0/src/slic3r/CMakeLists.txt.no-cereal-lib PrusaSlicer-version_2.4.0/src/slic3r/CMakeLists.txt
+--- PrusaSlicer-version_2.4.0/src/slic3r/CMakeLists.txt.no-cereal-lib	2022-02-11 20:30:36.653762157 +0000
++++ PrusaSlicer-version_2.4.0/src/slic3r/CMakeLists.txt	2022-02-11 20:30:47.604388990 +0000
+@@ -260,7 +260,7 @@ add_library(libslic3r_gui STATIC ${SLIC3
+ 
+ encoding_check(libslic3r_gui)
+ 
+-target_link_libraries(libslic3r_gui libslic3r avrdude cereal imgui GLEW::GLEW OpenGL::GL hidapi libcurl ${wxWidgets_LIBRARIES})
++target_link_libraries(libslic3r_gui libslic3r avrdude imgui GLEW::GLEW OpenGL::GL hidapi libcurl ${wxWidgets_LIBRARIES})
+ 
+ if (MSVC)
+     target_link_libraries(libslic3r_gui Setupapi.lib)
