@@ -155,8 +155,8 @@ Provides: bundled(mesa-libGLU)
 # License: MIT
 Provides: bundled(miniz) = 2.1.0prusa
 
-# A header-only library, developed by one of the authors of PrusaSlicer.  Not
-# packaged in Fedora, but could be (for little benefit).
+# A header-only library, developed by one of the authors of PrusaSlicer.
+# Packaged in Fedora, but have not yet attempted unbundling.
 # None of the source files carry licensing information, but a file LICENSE.txt
 # exists and contains the AGPL text.
 # License: AGPLv3
