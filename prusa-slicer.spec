@@ -40,10 +40,6 @@ Patch351:       https://github.com/archlinux/svntogit-community/blob/1dea61c0b5/
 %global _smp_ncpus_max 8
 %endif
 
-# Workaround for https://github.com/prusa3d/PrusaSlicer/issues/7231
-#                https://bugzilla.redhat.com/show_bug.cgi?id=2023345
-%global optflags %(echo '%optflags' | sed s/-Wp,-D_GLIBCXX_ASSERTIONS//)
-
 BuildRequires:  boost-devel
 BuildRequires:  cmake
 BuildRequires:  cereal-devel
