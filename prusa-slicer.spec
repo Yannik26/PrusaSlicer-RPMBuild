@@ -8,7 +8,7 @@
 
 Name:           prusa-slicer
 Version:        2.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -217,6 +217,11 @@ Provides: slic3r-prusa3d = %version-%release
 # Get Fedora 33++ behavior on anything older
 %undefine __cmake_in_source_build
 
+# i686 arm build fails with lto
+%ifarch %ix86 %arm
+%define _lto_cflags %{nil}
+%endif
+
 %description
 PrusaSlicer takes 3D models (STL, OBJ, AMF) and converts them into G-code
 instructions for FFF printers or PNG layers for mSLA 3D printers. It's
@@ -268,6 +273,10 @@ unbundle glew
 # Just remove them for now
 rm -f t/combineinfill.t t/custom_gcode.t t/fill.t t/multi.t t/retraction.t t/skirt_brim.t
 commit "Remove xfail tests."
+
+# compiling test_voronoi.cpp seems to hang...
+sed -i tests/libslic3r/CMakeLists.txt -e '\@test_voronoi.cpp@d'
+commit "Disable voronoi test"
 
 
 %build
@@ -373,6 +382,10 @@ desktop-file-validate %buildroot%_datadir/applications/PrusaGcodeviewer.desktop
 %_udevrulesdir/90-3dconnexion.rules
 
 %changelog
+* Wed Mar  2 2022 Mamoru TASAKA <mtasaka@fedoraproject.org> - 2.4.0-2
+- %%ix86 %%arm: kill LTO for now
+- kill test_voronoi.cpp, compilation (as) hangs
+
 * Mon Feb 14 2022 Tom Callaway <spot@fedoraproject.org> - 2.4.0-1
 - update to 2.4.0
 
