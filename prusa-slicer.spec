@@ -8,7 +8,7 @@
 
 Name:           prusa-slicer
 Version:        2.4.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -275,8 +275,11 @@ rm -f t/combineinfill.t t/custom_gcode.t t/fill.t t/multi.t t/retraction.t t/ski
 commit "Remove xfail tests."
 
 # compiling test_voronoi.cpp seems to hang...
+# Fixed with binutils-2.38-6.fc37 (bug 2059646)
+%if 0%{?fedora} < 37
 sed -i tests/libslic3r/CMakeLists.txt -e '\@test_voronoi.cpp@d'
 commit "Disable voronoi test"
+%endif
 
 
 %build
@@ -382,9 +385,12 @@ desktop-file-validate %buildroot%_datadir/applications/PrusaGcodeviewer.desktop
 %_udevrulesdir/90-3dconnexion.rules
 
 %changelog
+* Thu Mar 17 2022 Mamoru TASAKA <mtasaka@fedoraproject.org> - 2.4.0-3
+- Remove the previous voronoi workaround for fixed binutils
+
 * Wed Mar  2 2022 Mamoru TASAKA <mtasaka@fedoraproject.org> - 2.4.0-2
 - %%ix86 %%arm: kill LTO for now
-- kill test_voronoi.cpp, compilation (as) hangs
+- kill test_voronoi.cpp, compilation (as) hangs (bug 2059646)
 
 * Mon Feb 14 2022 Tom Callaway <spot@fedoraproject.org> - 2.4.0-1
 - update to 2.4.0
