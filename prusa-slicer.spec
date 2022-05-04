@@ -8,7 +8,7 @@
 
 Name:           prusa-slicer
 Version:        2.4.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -385,6 +385,9 @@ desktop-file-validate %buildroot%_datadir/applications/PrusaGcodeviewer.desktop
 %_udevrulesdir/90-3dconnexion.rules
 
 %changelog
+* Wed May 04 2022 Thomas Rodgers <trodgers@redhat.com> - 2.4.0-4
+- Rebuilt for Boost 1.78
+
 * Thu Mar 17 2022 Mamoru TASAKA <mtasaka@fedoraproject.org> - 2.4.0-3
 - Remove the previous voronoi workaround for fixed binutils
 
