@@ -39,6 +39,11 @@ Patch351:       https://github.com/archlinux/svntogit-community/blob/1dea61c0b5/
 %global _smp_ncpus_max 8
 %endif
 
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10
+ExcludeArch:    %{ix86}
+%endif
+
 BuildRequires:  boost-devel
 BuildRequires:  cmake
 BuildRequires:  cereal-devel
