@@ -8,7 +8,7 @@
 
 Name:           prusa-slicer
 Version:        2.4.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        3D printing slicer optimized for Prusa printers
 
 # The main PrusaSlicer code and resources are AGPLv3, with small parts as
@@ -67,8 +67,7 @@ BuildRequires:  openvdb
 BuildRequires:  openvdb-devel
 BuildRequires:  systemd-devel
 BuildRequires:  tbb-devel
-BuildRequires:  wxBase3-devel
-BuildRequires:  wxGTK3-devel
+BuildRequires:  wxGTK-devel
 
 # Things we wish we could unbundle
 #BuildRequires:  admesh-devel >= 0.98.1
@@ -390,6 +389,9 @@ desktop-file-validate %buildroot%_datadir/applications/PrusaGcodeviewer.desktop
 %_udevrulesdir/90-3dconnexion.rules
 
 %changelog
+* Thu Aug 04 2022 Scott Talbert <swt@techie.net> - 2.4.2-2
+- Rebuild with wxWidgets 3.2
+
 * Fri Jul 22 2022 Jan Staněk <jstanek@redhat.com> - 2.4.2-1
 - Update to 2.4.2
 
